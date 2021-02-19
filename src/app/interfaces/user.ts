@@ -4,7 +4,7 @@ export interface UserInterface {
     lastname: string;
     email: string;
     fiscalcode: string;
-    telephone: string;
+    phone: string;
     province: string;
     age: number;
 }

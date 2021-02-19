@@ -44,11 +44,20 @@ export class UserDetailComponent implements OnInit {
 
   saveUser(){
     if(this.user.id > 0){
-      this.userService.updateUser(this.user);
+      this.userService.updateUser(this.user).subscribe(
+        res => {
+          if(res.success){
+            alert("Utente salvato "+res.message);
+            this.router.navigate(['users']);
+          } else{
+            alert(res.message);
+          }
+        }
+      );
     }else{
       this.userService.createUser(this.user);
     }
-    alert("Utente salvato "+this.user.name);
+   
   }
 
   resetForm(){

@@ -6,7 +6,7 @@ export class User implements UserInterface{
     lastname: string;
     email: string;
     fiscalcode: string;
-    telephone: string;
+    phone: string;
     province: string;
     age: number;
 
@@ -16,7 +16,7 @@ export class User implements UserInterface{
         this.lastname= '';
         this.email= '';
         this.fiscalcode= '';
-        this.telephone= '';
+        this.phone= '';
         this.province= '';
         this.age= 18;
     }

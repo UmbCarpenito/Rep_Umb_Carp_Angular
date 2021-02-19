@@ -2,13 +2,18 @@ import { Injectable } from "@angular/core";
 import { User } from "../classes/user";
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 
+interface UserResponse{
+    data: User;
+    message: string;
+    success: boolean;
+}
+
 @Injectable() // indica ad Angular che questo servizio può avere delle dipendenze....è un decorator 
 
 export class UserService{
     users: User[] = [];
 
     private API_URL_USERS = 'http://localhost:8080/users/';    
-    private API_URL_USER = 'http://localhost:8080/user/';
 
     // users: User[] = [
     //     {
@@ -48,6 +53,7 @@ export class UserService{
    
     getUsers(){
         //return this.users;
+        console.log("prova user service ", this.API_URL_USERS)
         return this.httpClient.get(this.API_URL_USERS);
     }
 
@@ -60,10 +66,13 @@ export class UserService{
     }
 
     updateUser(user: User){
-        const idx = this.users.findIndex((v) => v.id === user.id); // verifico l'id che viene passata alla funzione con quello dell'utente... 
-        if(idx !== -1){
-            this.users[idx]= user;
-        }
+        // const idx = this.users.findIndex((v) => v.id === user.id); // verifico l'id che viene passata alla funzione con quello dell'utente... 
+        // if(idx !== -1){
+        //     this.users[idx]= user;
+        // }
+        console.log(user);
+        console.log(this.API_URL_USERS + '/' + user.id)
+        return this.httpClient.put<UserResponse>(this.API_URL_USERS + '/' + user.id, user);
     }
 
     createUser(user: User){
