@@ -9,7 +9,7 @@ import { UserService } from '../service/user.service';
   styleUrls: ['./user-data.component.css']
 })
 export class UserDataComponent implements OnInit {
-  public user: any;
+  user: any = [];
   title="Info User";
  
   constructor(private route:ActivatedRoute, private userService: UserService,
@@ -20,8 +20,12 @@ export class UserDataComponent implements OnInit {
     this.route.params.subscribe(p => {
 
       this.userService.getUser(+p.id).subscribe(
-          (res: any) => {
+          (res) => {
             this.user = res ;
+          },
+          error => {
+            console.log("error UserShow "+error.error.message);
+            alert(error.error.message);
           }
       );
 

@@ -53,16 +53,16 @@ export class UserService{
    
     getUsers(){
         //return this.users;
-        console.log("prova user service ", this.API_URL_USERS)
         return this.httpClient.get(this.API_URL_USERS);
     }
 
     deleteUser(user: User){
-        let index = this.users.indexOf(user);
-        if(index >= 0){
-            this.users.splice(index,1);
-        }
-        
+        // let index = this.users.indexOf(user);
+        // if(index >= 0){
+        //     this.users.splice(index,1);
+        // }
+        console.log("delete "+ user.id)
+        return this.httpClient.delete<UserResponse>(this.API_URL_USERS + user.id);
     }
 
     updateUser(user: User){
@@ -70,17 +70,19 @@ export class UserService{
         // if(idx !== -1){
         //     this.users[idx]= user;
         // }
-        console.log(user);
-        console.log(this.API_URL_USERS + '/' + user.id)
-        return this.httpClient.put<UserResponse>(this.API_URL_USERS + '/' + user.id, user);
+        // console.log(user);
+        // console.log(this.API_URL_USERS + user.id)
+        return this.httpClient.put(this.API_URL_USERS + user.id, user);
     }
 
     createUser(user: User){
-        this.users.splice(0,0,user);
+        // user.id = this.users.length +1;
+        // this.users.splice(0,0,user);
+        return this.httpClient.post(this.API_URL_USERS, user);
     }
 
     getUser(id: number){
         //return this.users.find(user => user.id === index);
-        return this.httpClient.get(this.API_URL_USERS + '/' + id);
+        return this.httpClient.get<UserResponse>(this.API_URL_USERS + id);
     }
 }

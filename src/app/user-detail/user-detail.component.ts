@@ -42,22 +42,37 @@ export class UserDetailComponent implements OnInit {
       });
   }
 
+  updateUser(){
+    this.userService.updateUser(this.user).subscribe(
+      res => {
+        // if(res.success){
+          alert("Update avvenuto\n"+this.user.name);
+          this.router.navigate(['users']);
+        // } else{
+        //   alert("Utente salvato errore "+res.success);
+        // }
+      },
+      error => console.error(error));
+  }
+
+  createUser(){
+    this.userService.createUser(this.user).subscribe(
+      res => {
+        alert("Utente salvato\n"+this.user.name);
+        this.router.navigate(['users']);
+      },
+      error => {
+        console.error(error);
+        alert("Errore\n"+error.error.message);
+      }
+    );
+  }
   saveUser(){
-    if(this.user.id > 0){
-      this.userService.updateUser(this.user).subscribe(
-        res => {
-          if(res.success){
-            alert("Utente salvato "+res.message);
-            this.router.navigate(['users']);
-          } else{
-            alert(res.message);
-          }
-        }
-      );
-    }else{
-      this.userService.createUser(this.user);
+    if(this.user.id > 0){ // in questo if c'entro quando ho gia un id....quindi sto facendo un update
+      this.updateUser();
+    }else{ //in questo else ci entro quando sto creando da id=0 un nuovo utente
+      this.createUser();
     }
-   
   }
 
   resetForm(){
