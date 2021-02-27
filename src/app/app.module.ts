@@ -13,30 +13,10 @@ import { NavComponent } from './nav/nav.component';
 import { RouterModule, Routes } from '@angular/router';
 import { UserDataComponent } from './user-data/user-data.component';
 import { HttpClientModule } from '@angular/common/http';
-
-export const routers: Routes = [
-  {
-    path: 'users',
-    component: UsersComponent
-  },
-  {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: 'users'
-  },
-  {
-    path: 'users/newUser',
-    component: UserDetailComponent
-  },
-  {
-    path: 'users/:id/edit',
-    component: UserDetailComponent
-  },
-  {
-    path: 'users/:id/showUser',
-    component: UserDataComponent
-  }
-];
+import { RoutingModuleModule } from './routing-module.module';
+import { AuthService } from './service/auth.service';
+import { LoginComponent } from './login/login.component';
+import { SignupComponent } from './signup/signup.component';
 
 @NgModule({
   declarations: [
@@ -45,16 +25,19 @@ export const routers: Routes = [
     UserComponent,
     UserDetailComponent,
     NavComponent,
-    UserDataComponent
+    UserDataComponent,
+    LoginComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule, // da importare quando utilizzo la funzione ngModel
-    RouterModule.forRoot(routers),
-    HttpClientModule
+    HttpClientModule,
+    RoutingModuleModule
   ],
-  providers: [UserService],
+  providers: [UserService,
+    AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
