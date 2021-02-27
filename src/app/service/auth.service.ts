@@ -22,17 +22,18 @@ export class AuthService {
   signIn(email:string, password: string):boolean{
     console.log("signIn: ", email+ " " + password);
     let user = new User();
-    user.name = "test";
+    user.name = "Test Auth";
     user.email ="test@signin.it";
     this.usersignin.emit(user);
     localStorage.setItem('token', email);
-    return this.isUserLogged;
+    return true;
   }
 
   signUp(name: string,email:string, password: string){
     console.log("signUp: ", name, " ",email, " ", password);
     localStorage.setItem('token', email);
     let user = new User();
+    console.log("NOME ", name);
     user.name = name;
     user.email = email;
     this.usersignup.emit(user);

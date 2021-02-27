@@ -17,7 +17,7 @@ export class SignupComponent implements OnInit {
 
   signUp(form: NgForm){
     console.log("signUp form.value: ",form.value);
-    let result = this.auth.signUp(form.value.name, form.value.email, form.value.password);
+    let result = this.auth.signUp(form.value.nome, form.value.email, form.value.password);
     console.log("result ", result)
     if(!result){
       return ;

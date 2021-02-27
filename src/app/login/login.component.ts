@@ -26,9 +26,8 @@ export class LoginComponent implements OnInit {
     if(result){
       console.log("prova")
       this.router.navigate(["/"]);
-      return true;
     }
-    return false;
+    return true;
    }
 
 
