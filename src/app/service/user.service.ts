@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { User } from "../classes/user";
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpHeaders, HttpRequest } from '@angular/common/http';
 
 interface UserResponse{
     data: User;
@@ -11,6 +11,7 @@ interface UserResponse{
 @Injectable() // indica ad Angular che questo servizio può avere delle dipendenze....è un decorator 
 
 export class UserService{
+    [x: string]: any;
     users: User[] = [];
 
     private API_URL_USERS = 'http://localhost:8080/users/';    
@@ -53,7 +54,26 @@ export class UserService{
    
     getUsers(){
         //return this.users;
-        return this.httpClient.get(this.API_URL_USERS);
+        let value = localStorage.getItem('token');
+        //const header = (this.loggedIn) ? { Authorization: `Bearer ${this.token}` } : undefined;
+        const headerDict = {
+            'Content-Type': 'application/json',
+            'Accept': '*/*',
+            'Access-Control-Allow-Headers':  'Content-Type',
+            'Authorization':`Bearer ${JSON.parse(JSON.stringify(localStorage.getItem('token'))!)}` //'Bearer \''+value+'\''
+          }
+          
+          const requestOptions = {                                                                                                                                                                                 
+            headers: new HttpHeaders(headerDict), 
+          };
+
+        console.log("user service getToken "+ localStorage.getItem('token'))
+         return this.httpClient.get(this.API_URL_USERS,requestOptions)
+             //{//JSON.parse(localStorage.getItem('token')!
+          //        headers:  new HttpRequest().('Authorization', `Bearer ${JSON.parse(JSON.stringify(localStorage.getItem('token'))!)}`)
+        //    headers: new HttpHeaders().set('Authorization', `Bearer ${JSON.parse(JSON.stringify(localStorage.getItem('token'))!)}`)
+        //    });
+         // return this.httpClient.get(this.API_URL_USERS)
     }
 
     deleteUser(user: User){
