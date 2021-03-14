@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../service/auth.service';
 import {NgForm} from "@angular/forms";
 import { HttpClient } from '@angular/common/http';
+import { User } from '../classes/user';
 
 @Component({
   selector: 'app-login',
@@ -17,27 +18,22 @@ export class LoginComponent implements OnInit {
     private httpClient: HttpClient) { }
 
   ngOnInit(): void {
+    this.auth.usersignin.subscribe(
+      (user: User) => {
+        this.router.navigate(['/']);
+      }
+    );
   }
 
   signIn(form: NgForm){
-    // console.log(form.value)
-    // console.log(form.valid)
+ 
     if(!form.valid){
       return false;
     }
-    let result = this.auth.signIn(form.value.email, form.value.password);
-    console.log("result ", result)
-    // if(result){
-    //   setTimeout(() => {
-    //     console.log("login component");
-    //     this.httpClient.get(this.API_URL_USERS);
-        
-    //   }, 800);
+    let result = this.auth.signIn(form.value.email, form.value.password);   
+    // setTimeout(() => {
     //   this.router.navigate(['']);
-    // }
-    setTimeout(() => {
-      this.router.navigate(['']);
-    }, 11800);
+    // }, 11800);
     return true;
    }
 

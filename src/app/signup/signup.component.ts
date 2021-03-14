@@ -13,17 +13,21 @@ export class SignupComponent implements OnInit {
   constructor(private auth: AuthService, private router: Router) { }
 
   ngOnInit(): void {
+    this.auth.usersignup.subscribe(
+      () => {
+        this.router.navigate(['/']);
+      }
+    );
   }
 
   signUp(form: NgForm){
     console.log("signUp form.value: ",form.value);
-    let result = this.auth.signUp(form.value.nome, form.value.email, form.value.password);
-    console.log("result ", result)
-    if(!result){
-      return ;
-    }
-    setTimeout(() => {
-      this.router.navigate(['']);
-    }, 300);
+    this.auth.signUp(form.value.nome, form.value.email, form.value.password);
+    // if(!result){
+    //   return ;
+    // }
+    // setTimeout(() => {
+    //   this.router.navigate(['']);
+    // }, 300);
   }
 }

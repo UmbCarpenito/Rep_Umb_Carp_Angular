@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { User } from "../classes/user";
 import { HttpClient, HttpClientModule, HttpHeaders, HttpRequest } from '@angular/common/http';
+import { AuthService } from './auth.service';
 
 interface UserResponse{
     data: User;
@@ -49,30 +50,38 @@ export class UserService{
     //     }
     // ];
 
-    constructor(private httpClient: HttpClient){
+    constructor(private httpClient: HttpClient, private auth: AuthService){
     }
    
+    getAuthHeader(): HttpHeaders{
+        let headers = new HttpHeaders(
+            {
+                Authorization : 'Bearer ' + this.auth.getToken()
+            }
+        );
+        return headers;
+    }
+
     getUsers(){
         //return this.users;
-        let value = localStorage.getItem('token');
-        //const header = (this.loggedIn) ? { Authorization: `Bearer ${this.token}` } : undefined;
-        const headerDict = {
-            'Content-Type': 'application/json',
-            'Accept': '*/*',
-            'Access-Control-Allow-Headers':  'Content-Type',
-            'Authorization':`Bearer ${JSON.parse(JSON.stringify(localStorage.getItem('token'))!)}` //'Bearer \''+value+'\''
-          }
-          
-          const requestOptions = {                                                                                                                                                                                 
-            headers: new HttpHeaders(headerDict), 
-          };
+
+        // let value = localStorage.getItem('token');
+        // const headerDict = {
+        //     'Content-Type': 'application/json',
+        //     'Accept': '*/*',
+        //     'Access-Control-Allow-Headers':  'Content-Type',
+        //     'Authorization':`Bearer ${JSON.parse(JSON.stringify(localStorage.getItem('token'))!)}` //'Bearer \''+value+'\''
+        //   }
+        //   const requestOptions = {                                                                                                                                                                                 
+        //     headers: new HttpHeaders(headerDict), 
+        //   };
 
         console.log("user service getToken "+ localStorage.getItem('token'))
-         return this.httpClient.get(this.API_URL_USERS,requestOptions)
-             //{//JSON.parse(localStorage.getItem('token')!
-          //        headers:  new HttpRequest().('Authorization', `Bearer ${JSON.parse(JSON.stringify(localStorage.getItem('token'))!)}`)
-        //    headers: new HttpHeaders().set('Authorization', `Bearer ${JSON.parse(JSON.stringify(localStorage.getItem('token'))!)}`)
-        //    });
+      //   return this.httpClient.get(this.API_URL_USERS,requestOptions)
+         return this.httpClient.get(this.API_URL_USERS,{
+            headers: this.getAuthHeader()
+         })
+
          // return this.httpClient.get(this.API_URL_USERS)
     }
 
@@ -82,7 +91,9 @@ export class UserService{
         //     this.users.splice(index,1);
         // }
         console.log("delete "+ user.id)
-        return this.httpClient.delete<UserResponse>(this.API_URL_USERS + user.id);
+        return this.httpClient.delete<UserResponse>(this.API_URL_USERS + user.id,{
+            headers: this.getAuthHeader()
+         });
     }
 
     updateUser(user: User){
@@ -92,17 +103,23 @@ export class UserService{
         // }
         // console.log(user);
         // console.log(this.API_URL_USERS + user.id)
-        return this.httpClient.put(this.API_URL_USERS + user.id, user);
+        return this.httpClient.put(this.API_URL_USERS + user.id, user,{
+            headers: this.getAuthHeader()
+         });
     }
 
     createUser(user: User){
         // user.id = this.users.length +1;
         // this.users.splice(0,0,user);
-        return this.httpClient.post(this.API_URL_USERS, user);
+        return this.httpClient.post(this.API_URL_USERS, user,{
+            headers: this.getAuthHeader()
+         });
     }
 
     getUser(id: number){
         //return this.users.find(user => user.id === index);
-        return this.httpClient.get<UserResponse>(this.API_URL_USERS + id);
+        return this.httpClient.get<UserResponse>(this.API_URL_USERS + id, {
+            headers: this.getAuthHeader()
+         });
     }
 }

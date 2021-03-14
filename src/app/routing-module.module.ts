@@ -11,16 +11,19 @@ import { SignupComponent } from './signup/signup.component';
 const routers: Routes = [
   {
     path: 'users',
-    component: UsersComponent
+    component: UsersComponent,
+    canActivate: [RouteGuardService]
   },
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'users'
+    redirectTo: 'users',
+    canActivate: [RouteGuardService]
   },
   {
     path: 'users/newUser',
-    component: UserDetailComponent
+    component: UserDetailComponent,
+    canActivate: [RouteGuardService]
   },
   {
     path: 'users/:id/edit',
@@ -29,7 +32,8 @@ const routers: Routes = [
   },
   {
     path: 'users/:id/showUser',
-    component: UserDataComponent
+    component: UserDataComponent,
+    canActivate: [RouteGuardService]
   },
   {
     path: 'login',
