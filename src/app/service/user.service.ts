@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { User } from "../classes/user";
 import { HttpClient, HttpClientModule, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
 
 interface UserResponse{
     data: User;
@@ -15,7 +16,7 @@ export class UserService{
     [x: string]: any;
     users: User[] = [];
 
-    private API_URL_USERS = 'http://localhost:8080/users/';    
+    private API_URL_USERS = environment.API_URL +'users/';    
 
     // users: User[] = [
     //     {

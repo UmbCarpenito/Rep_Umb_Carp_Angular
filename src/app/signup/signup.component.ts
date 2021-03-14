@@ -13,16 +13,35 @@ export class SignupComponent implements OnInit {
   constructor(private auth: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-    this.auth.usersignup.subscribe(
-      () => {
-        this.router.navigate(['/']);
-      }
-    );
+   
   }
 
-  signUp(form: NgForm){
+  async signUp(form: NgForm){
     console.log("signUp form.value: ",form.value);
-    this.auth.signUp(form.value.nome, form.value.email, form.value.password);
+    
+    try{
+      const resp = await this.auth.signUp(form.value.nome, form.value.email, form.value.password).
+        toPromise();
+        alert("Utente " + resp.username + " registrato");
+        this.router.navigate(['login']);
+    }
+    catch(e){
+      console.log("Error signup component ",e)
+      switch(e.status){
+        case 401:
+          alert("Error 401\n"+ e.message);
+          break;
+        case 404:
+          alert("Error 404\n"+ e.message);
+          break;
+         case 500:
+          alert("Error 500 \n"+ e.message);
+          break;
+        default:
+          alert("Error\n"+ e.message);
+          break;
+      }
+    }
     // if(!result){
     //   return ;
     // }

@@ -3,6 +3,8 @@ import { tokenize } from '@angular/compiler/src/ml_parser/lexer';
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from '../classes/user';
+import {tap} from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 interface UserJwt {
     token: string,
@@ -22,8 +24,8 @@ export class AuthService {
   @Output() usersignin = new EventEmitter<User>();
   @Output() usersignup = new EventEmitter<User>();
   @Output() userlogout = new EventEmitter();
-  private API_URL_LOGIN = 'http://localhost:8080/login';
-  private API_URL_REGISTER = 'http://localhost:8080/register';
+  private API_URL_LOGIN = environment.API_URL+'login';
+  private API_URL_REGISTER = environment.API_URL+'register';
 
   constructor(private httpClient: HttpClient) {
    }
@@ -37,11 +39,13 @@ export class AuthService {
   //metodo di login
   signIn(email:string, password: string){
     console.log("signIn: ", email+ " password: " + password);
-    let val = this.httpClient.post<UserJwt>(this.API_URL_LOGIN,
+    return this.httpClient.post<UserJwt>(this.API_URL_LOGIN,
       {
         email: email,
         password: password
-      }).subscribe(
+      }).pipe(
+        tap(
+    //  subscribe(
         (payload: UserJwt) => {
           console.log("auth service signIn payload.token "+ payload.token)
           localStorage.setItem('token', payload.token);
@@ -56,13 +60,14 @@ export class AuthService {
           
           this.usersignin.emit(user);
           return true;
-        },
-        (httpErrorResponse: HttpErrorResponse) => {
-         console.log("AuthService error auth.service ", httpErrorResponse)
-          alert("ERROR\n"+ httpErrorResponse.error.message)
-          return false;
-        },
-      )
+        }
+        // ,
+        // (httpErrorResponse: HttpErrorResponse) => {
+        //  console.log("AuthService error auth.service ", httpErrorResponse)
+        //   alert("ERROR\n"+ httpErrorResponse.error.message)
+        //   return false;
+        // },
+      ))
 
   }
 
@@ -70,12 +75,13 @@ export class AuthService {
   signUp(username: string,email:string, password: string){
     console.log("AuthService signUp username", username, " email ",email, " password ", password);
     let user = new User();
-    let val = this.httpClient.post<UserResponseRegister>(this.API_URL_REGISTER,
+    return this.httpClient.post<UserResponseRegister>(this.API_URL_REGISTER,
       {
         username: username,
         email: email,
         password: password
-      }).subscribe(
+      }).pipe(tap(
+      //subscribe(
         (payload: UserResponseRegister) => {
           localStorage.setItem('user_email', payload.email);
           localStorage.setItem('username', payload.username);
@@ -86,11 +92,12 @@ export class AuthService {
           
           this.usersignup.emit(user);
         },
-        (httpErrorResponse: HttpErrorResponse) => {
-         console.log("AuthService error auth.service ", httpErrorResponse)
-          alert("ERROR\n"+ httpErrorResponse.error.message)
-          return false;
-        },
+        // (httpErrorResponse: HttpErrorResponse) => {
+        //  console.log("AuthService error auth.service ", httpErrorResponse)
+        //   alert("ERROR\n"+ httpErrorResponse.error.message)
+        //   return false;
+        // },
+      )
       )
     //let val = this.httpClient.post<Jwt>
     // localStorage.setItem('token', email);
@@ -102,7 +109,7 @@ export class AuthService {
     // if(!localStorage.getItem('token')){
     //   return false;
     // }
-    return true;
+   // return true;
   }
 
   logout(){
